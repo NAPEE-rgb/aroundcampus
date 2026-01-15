@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyShop - Products</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- Added Google Fonts for a professional look -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Roboto', sans-serif; 
+            background-color: #f4f7fa; /* Soft, professional background */
+            color: #333; 
+            line-height: 1.6; 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar - Clean and professional */
+        nav { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 1rem 2rem; 
+            background-color: #ffffff; /* Clean white */
+            color: #333; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+            border-bottom: 1px solid #e0e0e0;
+        }
+        nav h1 { 
+            font-size: 1.8rem; 
+            font-weight: 700; 
+            color: #007bff; /* Professional blue */
+        }
+        nav .cart { 
+            cursor: pointer; 
+            position: relative; 
+            margin-left: 1rem; 
+        }
+        nav .cart span { 
+            position: absolute; 
+            top: -8px; 
+            right: -8px; 
+            background-color: #dc3545; /* Subtle red for alerts */
+            color: #fff; 
+            padding: 3px 7px; 
+            border-radius: 50%; 
+            font-size: 12px; 
+            font-weight: bold; 
+        }
+        nav a { 
+            color: #555; 
+            text-decoration: none; 
+            margin: 0 0.5rem; 
+            transition: color 0.3s; 
+            font-weight: 500; 
+        }
+        nav a:hover { 
+            color: #007bff; 
+        }
+
+        /* Search & Filter - Professional input design */
+        .search-filter-container {
+            text-align: center; 
+            margin: 2rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        #search, #filterCategory { 
+            padding: 0.75rem 1rem; 
+            border-radius: 8px; 
+            border: 1px solid #ccc; 
+            font-size: 1rem; 
+            outline: none; 
+            background-color: #fff; 
+            transition: border-color 0.3s, box-shadow 0.3s; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        #search:focus, #filterCategory:focus { 
+            border-color: #007bff; 
+            box-shadow: 0 0 5px rgba(0,123,255,0.3); 
+        }
+        #search { 
+            flex: 1; 
+            max-width: 300px; 
+        }
+
+        /* Product Grid - Set to 6 cards per row on desktop */
+        #products {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr); /* Exactly 6 cards per row */
+            gap: 1.5rem;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            justify-items: center;
+            flex-grow: 1;
+        }
+
+        /* Product Card - Professional and uniform, with significantly reduced height */
+        .product {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 0.5rem; /* Minimized padding for compactness */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            width: 100%;
+            max-width: 225px; /* Adjusted for 6 per row */
+            min-height: 220px; /* Significantly reduced height for a sleek professional look */
+            justify-content: space-between;
+            border: 1px solid #e9ecef;
+        }
+
+        .product:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+
+        /* Product Image - Clean and proportional, minimized */
+        .product img {
+            width: 100%;
+            height: 100px; /* Minimized height */
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 0.25rem; /* Reduced margin */
+            transition: transform 0.3s;
+        }
+
+        .product:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Product Name - Clear and readable, minimized */
+        .product h3 {
+            font-size: 1rem; /* Smaller font */
+            font-weight: 600;
+            margin: 0.1rem 0;
+            height: 30px; /* Reduced height */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            color: #333;
+        }
+
+        /* Product Description - Informative and concise, minimized */
+        .product p.description {
+            font-size: 0.8rem; /* Smaller font */
+            color: #666;
+            margin: 0.1rem 0;
+            flex-grow: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 1; /* Reduced to 1 line for compactness */
+            -webkit-box-orient: vertical;
+        }
+
+        /* Product Price - Prominent and professional */
+        .product p strong {
+            font-size: 0.95rem; /* Smaller */
+            color: #28a745; /* Professional green for pricing */
+            margin: 0.1rem 0;
+            font-weight: 700;
+        }
+
+        /* Button - Clean and actionable, minimized */
+        .product button {
+            padding: 0.3rem 0.6rem; /* Smaller padding */
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px; /* Smaller radius */
+            cursor: pointer;
+            font-size: 0.8rem; /* Smaller */
+            font-weight: 500;
+            transition: background-color 0.3s, transform 0.3s;
+            margin-top: auto;
+            box-shadow: 0 2px 4px rgba(0,123,255,0.3);
+        }
+        .product button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        /* Footer - Professional and clean */
+        footer {
+            background-color: #ffffff;
+            color: #666;
+            text-align: center;
+            padding: 1rem 2rem;
+            border-top: 1px solid #e0e0e0;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+            margin-top: auto;
+        }
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        footer a {
+            color: #007bff;
+            text-decoration: none;
+            margin: 0 0.5rem;
+            font-weight: 500;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive - 2 cards per row on all mobile screens */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            .search-filter-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            #products {
+                grid-template-columns: repeat(2, 1fr); /* 2 cards per row on mobile */
+                gap: 1rem;
+                padding: 1rem;
+            }
+            .product {
+                min-height: 180px; /* Significantly reduced for mobile */
+                max-width: 100%;
+            }
+            .product img {
+                height: 80px; /* Smaller image on mobile */
+            }
+            footer {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <h1>Around Campus</h1>
+        <div>
+            <span id="userEmail"></span> |
+            <a href="cart.html">Cart</a> |
+            <div class="cart" onclick="location.href='cart.html'">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="cartCount">0</span>
+            </div>
+            <a href="#" id="logoutBtn">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Search & Filter -->
+    <div class="search-filter-container">
+        <input type="text" id="search" placeholder="Search products...">
+        <select id="filterCategory">
+            <option value="">All Categories</option>
+        </select>
+    </div>
+
+    <!-- Product Grid -->
+    <div id="products"></div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2023 MyShop. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | <a href="contact.html">Contact Us</a></p>
+    </footer>
+
+    <script type="module" src="js/products.js"></script>
+    <script type="module" src="js/auth.js"></script>
+    <script>
+        // Fix logout button
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            // Assuming auth.js has a logout function, import and call it
+            import('./js/auth.js').then(module => {
+                if (module.logout) {
+                    module.logout();
+                } else {
+                    // Fallback: clear localStorage and redirect
+                    localStorage.removeItem('user');
+                    localStorage.removeItem('token');
+                    window.location.href = 'login.html'; // Adjust to your login page
+                }
+            }).catch(error => {
+                console.error('Error loading auth module:', error);
+                // Fallback
+                localStorage.removeItem('user');
+                localStorage.removeItem('token');
+                window.location.href = 'login.html';
+            });
+        });
+    </script>
+</body>
+</html>
